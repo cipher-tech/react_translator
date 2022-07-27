@@ -1,27 +1,30 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
+type IProps = {
+    rounded?: boolean
+    disabled?: boolean
+}
+export const Button = styled.button<IProps>`
     background: ${(props) => props.theme.colors.colorWhite}; ;
     color: ${(props) => props.theme.colors.colorPrimary};
     font-size: ${(props) => props.theme.font.size.xxxSmall};
     padding: 1rem 2rem;
-    border-radius: 0.5rem;
+    border-radius: ${(props) => props.rounded ? "5rem" : "0.5rem"};
     border: .01rem solid ${(props) => props.theme.colors.colorPrimary};
     display: flex;
     cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
     width: fit-content;
     align-self: center;
     place-items: center;
     transition: all .2s linear;
-    margin: 2rem;
+    margin: 1rem;
     :focus {
         outline: none;
     }
     :hover {
         background: ${(props) => props.theme.colors.colorPrimaryLight};
-    }
-    @media only screen and (max-width: ${(props) =>
-            props.theme.breakPoints.bpSmall}) {
-        padding: 1rem 2rem;
     }
 `;

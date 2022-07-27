@@ -2,23 +2,20 @@ import { DefaultTheme } from 'styled-components';
 
 const theme = {
     colors: {
-        primary: "#0075FF",
-        colorPrimary: "#0075FF",
+        primary: "#1c73e8",
+        colorPrimary: "#1c73e8",
         colorPrimaryLight: "#e5ecfa",
         colorPrimaryLight2: "#006FF2",
 
         colorRed: "#EE0000",
         colorAccentRed: "#FFEFEF",
 
-        colorGreen: "#00850D",
-        colorAccentGreen: "#EFFCE5",
-
         colorBlack: "#000000",
         colorBlackFaded: "#0000008a",
 
         colorWhite: "#FFFFFF",
         colorGrey: "#B2B2B2",
-        colorGrey2: "#d5d5d5",
+        colorGrey2: "#f5f5f5",
         colorLightGrey: "#EDEDED",
         colorDark: "##333333",
         colorTextDark: "#3C3B3B",

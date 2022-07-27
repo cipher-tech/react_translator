@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import Logo from "../../assets/images/logo.png";
 const Nav = styled.nav`
     background: ${(props) => props.theme.colors.colorWhite};
     width: 100%;
@@ -13,10 +13,15 @@ const Nav = styled.nav`
     a {
         cursor: pointer;
     }
-    .nav{
-        &-icon{
+    .nav {
+        &-icon {
             display: flex;
-            &__text{
+            align-items: center;
+            &__logo{
+                color: ${(props) => props.theme.colors.colorPrimary};
+                padding: 0rem 1rem
+            }
+            &__text {
                 color: ${(props) => props.theme.colors.colorLight};
             }
         }
@@ -32,10 +37,13 @@ export const NavBar = () => {
     return (
         <Nav className="nav">
             <div className="nav-icon">
-                <a className="nav-icon__text" href="/">LanTrans App</a>
+                <i className="bi bi-translate nav-icon__logo"></i>
+                <a className="nav-icon__text" href="/">
+                    ciTrans App
+                </a>
             </div>
             <p className="nav-greeting">
-                Hi, there
+                <i className="bi bi-github"></i>
             </p>
         </Nav>
     );

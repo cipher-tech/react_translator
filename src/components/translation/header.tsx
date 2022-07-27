@@ -52,7 +52,7 @@ const Container = styled.div`
 const Header = () => {
     return (
         <Container className="main">
-                <span className="main-selected">english</span>
+                <span className="main-selected">ENG</span>
                 <ul className="main-languageList">
                     <li className="main-languageList__item">
                         <a href="/#">English</a>
