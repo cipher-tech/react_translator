@@ -13,16 +13,29 @@ const Container = styled.div`
         cursor: pointer;
     }
     .translatorBox-input {
-        height: 20rem;
         padding: 0.5rem 1rem;
         display: flex;
         flex-direction: column;
         &__area{
           display: flex;
+          
           justify-content: space-between;
           &--input{
             border: none;
             flex: 1;
+          }
+        }
+        &__footer{
+          padding: 0rem 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-content: center;
+          align-items: center;
+          &--speech{
+            display: flex;
+            span{
+              padding: 1rem;
+            }
           }
         }
     }
@@ -37,7 +50,11 @@ export const TranslatorBox = () => {
                   <span className="translatorBox-input__area--clear">X</span>
                 </div>
                 <div className="translatorBox-input__footer">
-                  
+                  <div className="translatorBox-input__footer--speech">
+                    <span className="translatorBox-input__footer--speech--toText">sp</span>
+                    <span className="translatorBox-input__footer--speech--toVoice">vo</span>
+                  </div>
+                  <span>45/200</span>
                 </div>
             </div>
             
