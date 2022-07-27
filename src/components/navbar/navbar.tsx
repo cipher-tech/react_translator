@@ -5,7 +5,7 @@ const Nav = styled.nav`
     width: 100%;
     padding: 1.5rem 2rem;
     height: 6rem;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 2px 5px ${(props) => props.theme.colors.colorLight};
     display: flex;
     justify-content: space-between;
     align-content: center;
