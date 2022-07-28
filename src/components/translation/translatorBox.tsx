@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import { TranslatorContext } from "../../context";
+import { inputPosition, languagePosition } from "../../context/translatorContext";
 import Header from "./header";
 
 const Container = styled.div`
@@ -45,23 +48,31 @@ const Container = styled.div`
         }
     }
 `;
-export const TranslatorBox = () => {
+
+type IProps = {
+    position: inputPosition
+    languagePosition: languagePosition
+}
+export const TranslatorBox = ({position, languagePosition}: IProps) => {
+    const {translatorState, updateTextInput, clearInputs} = useContext(TranslatorContext)
     return (
         <Container className="translatorBox">
-            <Header />
+            <Header position={position} languagePosition={languagePosition} />
             <div className="translatorBox-input">
                 <div className="translatorBox-input__area">
                     <textarea
                         className="translatorBox-input__area--input"
                         name="input"
                         id="1"
+                        value={translatorState[position] || ''}
+                        onChange={(e) => {updateTextInput(position, languagePosition, e.target.value )}}
                         cols={50}
                         rows={10}
                     >
                         Enter text
                     </textarea>
                     <span className="translatorBox-input__area--clear">
-                        <i className="bi bi-x-lg"></i>
+                        <i className="bi bi-x-lg" onClick={() => clearInputs()}></i>
                     </span>
                 </div>
                 <div className="translatorBox-input__footer">

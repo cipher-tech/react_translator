@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { useContext } from "react";
+import { TranslatorContext } from "../../context";
+import { inputPosition, languagePosition } from "../../context/translatorContext";
 
 const Container = styled.div`
    
@@ -49,7 +52,12 @@ const Container = styled.div`
                 }
             }
 `;
-const Header = () => {
+
+type IProps = {
+    position: inputPosition
+    languagePosition: languagePosition
+}
+const Header = ({position, languagePosition}: IProps) => {
     return (
         <Container className="main">
                 <span className="main-selected">ENG</span>

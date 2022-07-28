@@ -48,8 +48,8 @@ export const TranslationElement = () => {
     return (
         <>
             <Container className="translationElement">
-                <TranslatorBox />
-                <TranslatorBox />
+                <TranslatorBox position={'rightInput'} languagePosition={'languageRight'} />
+                <TranslatorBox position={'leftInput'} languagePosition={'languageLeft'}/>
             </Container>
             <SuggestionBox className="suggestions">
                 <Button>
