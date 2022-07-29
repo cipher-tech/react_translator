@@ -1,17 +1,21 @@
 import styled from "styled-components";
+import translate from "../../api";
 import { Button } from "../button/button";
 import { TranslatorBox } from "./translatorBox";
-
+import { useContext } from "react";
+import { TranslatorContext } from "../../context";
 const Container = styled.div`
+    border-radius: .78rem;
+    overflow: hidden;
     margin-top: -3rem;
     width: 96%;
     display: flex;
     align-self: center;
     justify-content: center;
     align-content: center;
-    box-shadow: 0px 2px 5px ${(props) => props.theme.colors.colorLight};
-    @media only screen and (max-width: ${(props) =>
-            props.theme.breakPoints.bpLarge}) {
+    box-shadow: 0px 2px 5px ${ (props) => props.theme.colors.colorLight };
+    @media only screen and (max-width: ${ (props) =>
+        props.theme.breakPoints.bpLarge }) {
         flex-wrap: wrap;
     }
 `;
@@ -34,7 +38,7 @@ const Phrases = styled.div`
     flex-direction: column;
     align-items: flex-start;
     align-self: center;
-    color: ${(props) => props.theme.colors.colorLight};
+    color: ${ (props) => props.theme.colors.colorLight };
     .phrases {
         &-list {
             display: flex;
@@ -45,14 +49,27 @@ const Phrases = styled.div`
 `;
 
 export const TranslationElement = () => {
+    const { translatorState, updateTextInput } = useContext(TranslatorContext)
     return (
         <>
             <Container className="translationElement">
-                <TranslatorBox position={'rightInput'} languagePosition={'languageRight'} />
-                <TranslatorBox position={'leftInput'} languagePosition={'languageLeft'}/>
+                <TranslatorBox
+                    position={'rightInput'}
+                    languagePosition={'languageRight'}
+                />
+                <TranslatorBox
+                    position={'leftInput'}
+                    languagePosition={'languageLeft'} />
             </Container>
             <SuggestionBox className="suggestions">
-                <Button>
+                <Button onClick={() => {
+                    translate(translatorState[ translatorState.current ],
+                        translatorState.from,
+                        translatorState.to,
+                        updateTextInput,
+                        translatorState.current
+                        )
+                }}>
                     <span>Translate</span>
                     <i className="bi bi-arrow-left-right suggestions-icon"></i>
                 </Button>

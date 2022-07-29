@@ -11,12 +11,12 @@ const Container = styled.div`
     justify-content: space-between;
     align-content: flex-start;
     flex-direction: column;
-    color: ${(props) => props.theme.colors.colorLight};
+    color: ${ (props) => props.theme.colors.colorLight };
     a {
         cursor: pointer;
     }
     &:nth-child(2) {
-        background: ${(props) => props.theme.colors.colorGrey2};
+        background: ${ (props) => props.theme.colors.colorGrey2 };
     }
     .translatorBox-input {
         padding: 0.5rem 1rem;
@@ -53,8 +53,10 @@ type IProps = {
     position: inputPosition
     languagePosition: languagePosition
 }
-export const TranslatorBox = ({position, languagePosition}: IProps) => {
-    const {translatorState, updateTextInput, clearInputs} = useContext(TranslatorContext)
+export const TranslatorBox = ({ position, languagePosition }: IProps) => {
+    const { translatorState, updateTextInput, clearInputs } = useContext(TranslatorContext)
+    console.log("::::::;state state", translatorState);
+    const isLeftInput = position === 'leftInput';
     return (
         <Container className="translatorBox">
             <Header position={position} languagePosition={languagePosition} />
@@ -64,16 +66,21 @@ export const TranslatorBox = ({position, languagePosition}: IProps) => {
                         className="translatorBox-input__area--input"
                         name="input"
                         id="1"
-                        value={translatorState[position] || ''}
-                        onChange={(e) => {updateTextInput(position, languagePosition, e.target.value )}}
+                        value={translatorState[ position ] || ''}
+                        onChange={(e) => { updateTextInput(position, e.target.value) }}
                         cols={50}
                         rows={10}
                     >
                         Enter text
                     </textarea>
-                    <span className="translatorBox-input__area--clear">
-                        <i className="bi bi-x-lg" onClick={() => clearInputs()}></i>
-                    </span>
+
+                    {
+                        !isLeftInput ?
+                            <span className="translatorBox-input__area--clear">
+                                <i className="bi bi-x-lg" onClick={() => clearInputs()}></i>
+                            </span>
+                            : null
+                    }
                 </div>
                 <div className="translatorBox-input__footer">
                     <div className="translatorBox-input__footer--speech">
