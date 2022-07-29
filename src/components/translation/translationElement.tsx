@@ -2,8 +2,9 @@ import styled from "styled-components";
 import translate from "../../api";
 import { Button } from "../button/button";
 import { TranslatorBox } from "./translatorBox";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { TranslatorContext } from "../../context";
+import useDebounce from "../../hooks/useDebounce";
 const Container = styled.div`
     border-radius: .78rem;
     overflow: hidden;
@@ -50,6 +51,9 @@ const Phrases = styled.div`
 
 export const TranslationElement = () => {
     const { translatorState, updateTextInput } = useContext(TranslatorContext)
+    const {leftInput, rightInput} = translatorState
+    useDebounce([leftInput, rightInput])
+    
     return (
         <>
             <Container className="translationElement">
@@ -68,7 +72,7 @@ export const TranslationElement = () => {
                         translatorState.to,
                         updateTextInput,
                         translatorState.current
-                        )
+                    )
                 }}>
                     <span>Translate</span>
                     <i className="bi bi-arrow-left-right suggestions-icon"></i>

@@ -55,7 +55,6 @@ type IProps = {
 }
 export const TranslatorBox = ({ position, languagePosition }: IProps) => {
     const { translatorState, updateTextInput, clearInputs } = useContext(TranslatorContext)
-    console.log("::::::;state state", translatorState);
     const isLeftInput = position === 'leftInput';
     return (
         <Container className="translatorBox">

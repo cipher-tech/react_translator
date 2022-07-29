@@ -13,17 +13,19 @@ const translate = async (text: string, from: Language, to: Language, dispatch?: 
     }
 
     try {
+        if (text === '') {
+            return
+        }
         const apiKey = process.env.REACT_APP_API_KEY
         const URL1 = `https://api.cloudmersive.com/nlp-v2/translate/language/${ map[ from ] }/to/${ map[ to ] }`
         const URL = `http://localhost:4000/api/v1`;
 
         const response = await Axios.post(URL, {
-            headers: {
-                Apikey: apiKey
-            },
-            body: {
                 TextToTranslate: text
-            }
+        },{
+            headers: {
+                "Apikey": apiKey || "",
+            },
         })
 
         console.log("::::::::: response", {
@@ -31,6 +33,7 @@ const translate = async (text: string, from: Language, to: Language, dispatch?: 
             from,
             to,
             URL1,
+            position,
             response: response.data
         });
 

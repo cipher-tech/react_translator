@@ -1,8 +1,7 @@
 import React from "react";
-import translate from "../api";
 interface IActionType {
     UPDATE_TEXT: string;
-    UPDATE_BOTH_TEXT: string;
+    UPDATE_TEXT_FROM_API: string;
     UPDATE_LANGUAGE: string;
     CLEAR_TEXT: string;
 }
@@ -39,27 +38,29 @@ export type UpdateInputType = (textInputPosition: inputPosition, value: string) 
 interface IContextValues {
     translatorState: options,
     updateTextInput: UpdateInputType,
+    updateTextInputFromApi: UpdateInputType,
     updateLanguage: (value: Language) => void,
     clearInputs: () => void
 }
 
 const initialState: IContextValues = {
     translatorState: {
-        rightInput: "Language",
-        leftInput: "Language",
-        current: "rightInput",
+        rightInput: "",
+        leftInput: "",
+        current: "leftInput",
         selectedLanguage: "German",
         from: "english",
         to: "German"
     },
     updateTextInput: () => { },
+    updateTextInputFromApi: () => { },
     updateLanguage: () => { },
     clearInputs: () => { },
 };
 
 export const actions: IActionType = {
     UPDATE_TEXT: "UPDATE_TEXT",
-    UPDATE_BOTH_TEXT: "UPDATE_BOTH_TEXT",
+    UPDATE_TEXT_FROM_API: "UPDATE_TEXT_FROM_API",
     UPDATE_LANGUAGE: "REMOVE_TODO_ITEM",
     CLEAR_TEXT: "CLEAR_TEXT"
 };
@@ -68,7 +69,7 @@ export const actions: IActionType = {
 const reducer: (translatorState: IState, action: IAction) => IState = (
     state: IState,
     action: IAction
-) => {    
+) => {
     const { type,
         payload = { textInputPosition: '', value: '' }
     } = action;
@@ -96,6 +97,20 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                     to
                 }
             }
+
+        case actions.UPDATE_TEXT_FROM_API:
+            if (!payload.textInputPosition) {
+                return state
+            }
+
+            return {
+                ...state,
+                translatorState: {
+                    ...state.translatorState,
+                    [ payload.textInputPosition === 'leftInput'? 'rightInput' : 'leftInput' ]: payload.value,
+                }
+            }
+
         case actions.UPDATE_LANGUAGE:
             if (payload.value == null) {
                 return state
@@ -133,6 +148,9 @@ export const TranslatorProvider = ({ children }: IProps) => {
         translatorState: state.translatorState,
         updateTextInput: (textInputPosition: inputPosition, value: string) => {
             dispatch({ type: actions.UPDATE_TEXT, payload: { textInputPosition, value } });
+        },
+        updateTextInputFromApi: (textInputPosition: inputPosition, value: string) => {
+            dispatch({ type: actions.UPDATE_TEXT_FROM_API, payload: { textInputPosition, value } });
         },
         updateLanguage: (value: Language) => {
             dispatch({ type: actions.UPDATE_LANGUAGE, payload: { value } });
