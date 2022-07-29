@@ -5,13 +5,13 @@ import { inputPosition, languagePosition } from "../../context/translatorContext
 
 const Container = styled.div`
    
-            background: ${(props) => props.theme.colors.colorWhite};
+            background: ${ (props) => props.theme.colors.colorWhite };
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-around;
             border-bottom: 0.001rem solid
-                ${(props) => props.theme.colors.colorLight};
+                ${ (props) => props.theme.colors.colorLight };
             border-radius: 0.7rem 0 0 0;
             &:nth-child(2) {
                 border-radius: 0 0.7rem 0 0;
@@ -19,7 +19,7 @@ const Container = styled.div`
             .main{
 
                 &-selected {
-                    font-size: ${(props) => props.theme.font.size.xxxxSmall};
+                    font-size: ${ (props) => props.theme.font.size.xxxxSmall };
                     padding: 1rem;
                 }
                 &-languageList {
@@ -32,22 +32,25 @@ const Container = styled.div`
                         justify-self: center;
                         justify-content: center;
                         width: 100%;
+                        transition: all 0.1s linear;
                         a {
+                            transition: all 0.1s linear;
                             padding: 2rem 2rem;
                             width: 100%;
                             height: 100%;
                             display: flex;
                             justify-content: center;
                             &:hover {
-                                color: ${(props) =>
-                                    props.theme.colors.colorTextDark2};
+                                color: ${ (props) =>
+        props.theme.colors.colorTextDark2 };
                             }
                         }
-                        &:first-child {
-                            color: ${(props) => props.theme.colors.colorPrimary};
-                            border-bottom: 0.1rem solid
-                                ${(props) => props.theme.colors.colorPrimary};
-                        }
+                    }
+                    .active {
+                        transition: all 0.1s linear;
+                        color: ${ (props) => props.theme.colors.colorPrimary };
+                        border-bottom: 0.1rem solid
+                            ${ (props) => props.theme.colors.colorPrimary };
                     }
                 }
             }
@@ -57,21 +60,29 @@ type IProps = {
     position: inputPosition
     languagePosition: languagePosition
 }
-const Header = ({position, languagePosition}: IProps) => {
+const Header = ({ position, languagePosition }: IProps) => {
+    const { translatorState: { selectedLanguage }, updateLanguage } = useContext(TranslatorContext)
+    const options = {
+        rightInput: [ 'English' ],
+        leftInput: [ 'German', 'Russian', 'French' ],
+    }
     return (
         <Container className="main">
-                <span className="main-selected">ENG</span>
-                <ul className="main-languageList">
-                    <li className="main-languageList__item">
-                        <a href="/#">English</a>
+            <span className="main-selected">
+            <i className="bi bi-translate nav-icon__logo"></i>
+            </span>
+            <ul className="main-languageList">
+                {options[ position ].map(option => (
+                    <li
+                        key={option}
+                        className="main-languageList__item"
+                        onClick={() => { updateLanguage(option) }}>
+                        <a className={selectedLanguage === option ? "active" : ''} href="/#">{option}</a>
                     </li>
-                    <li className="main-languageList__item">
-                        <a href="/#">German</a>
-                    </li>
-                    <li className="main-languageList__item">
-                        <a href="/#">Russian</a>
-                    </li>
-                </ul>
+                ))
+                }
+
+            </ul>
         </Container>
     );
 };
