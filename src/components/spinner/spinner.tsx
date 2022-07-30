@@ -19,6 +19,6 @@ const Loader = styled.div`
 
 export const Spinner = () => {
   return (
-    <Loader><i className="bi bi-arrow-counterclockwise"></i></Loader>
+    <Loader><i className="bi bi-arrow-clockwise"></i></Loader>
   )
 }

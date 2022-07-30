@@ -51,10 +51,21 @@ const Phrases = styled.div`
 `;
 
 export const TranslationElement = () => {
-    const { translatorState, updateTextInputFromApi } = useContext(TranslatorContext)
-    const {leftInput, rightInput} = translatorState
-    useDebounce([leftInput, rightInput])
-    
+    const { translatorState, updateTextInputFromApi, updateTextInput} = useContext(TranslatorContext)
+    const { leftInput, rightInput } = translatorState
+    useDebounce([ leftInput, rightInput ])
+
+    const phrases = [
+        'Hello there!',
+        'Good morning',
+        'Goodbye',
+        'How are you?',
+    ]
+
+    const handlePhraseChange = (phrase: string) => {
+        if(phrase === translatorState[ translatorState.current ]) return
+        updateTextInput('rightInput', phrase); 
+    }
     return (
         <>
             <Container className="translationElement">
@@ -76,28 +87,23 @@ export const TranslationElement = () => {
                     )
                 }}>
                     <span>Translate</span>
-                    {translatorState.isLoading? <Spinner /> : <i className="bi bi-arrow-left-right suggestions-icon"></i>}
-                    
+                    {translatorState.isLoading ? <Spinner /> : <i className="bi bi-arrow-left-right suggestions-icon"></i>}
+
                 </Button>
             </SuggestionBox>
             <Phrases className="phrases">
                 <h3>Widely used phrases:</h3>
                 <ul className="phrases-list">
-                    <li className="phrases-list__item">
-                        <Button rounded>Hello there!</Button>
-                    </li>
-                    <li className="phrases-list__item">
-                        <Button rounded>Hello there!</Button>
-                    </li>
-                    <li className="phrases-list__item">
-                        <Button rounded>Hello there!</Button>
-                    </li>
-                    <li className="phrases-list__item">
-                        <Button rounded>Hello there!</Button>
-                    </li>
-                    <li className="phrases-list__item">
-                        <Button rounded>Hello there!</Button>
-                    </li>
+                    {
+                        phrases.map(phrase => (
+                            <li className="phrases-list__item"
+                                onClick={ (e) =>{handlePhraseChange(phrase)}}
+                            >
+                                <Button rounded>{phrase}</Button>
+                            </li>
+
+                        ))
+                    }
                 </ul>
             </Phrases>
         </>
