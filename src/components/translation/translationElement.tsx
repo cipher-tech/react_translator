@@ -5,6 +5,7 @@ import { TranslatorBox } from "./translatorBox";
 import { useContext, useEffect } from "react";
 import { TranslatorContext } from "../../context";
 import useDebounce from "../../hooks/useDebounce";
+import { Spinner } from "../spinner/spinner";
 const Container = styled.div`
     border-radius: .78rem;
     overflow: hidden;
@@ -50,7 +51,7 @@ const Phrases = styled.div`
 `;
 
 export const TranslationElement = () => {
-    const { translatorState, updateTextInput } = useContext(TranslatorContext)
+    const { translatorState, updateTextInputFromApi } = useContext(TranslatorContext)
     const {leftInput, rightInput} = translatorState
     useDebounce([leftInput, rightInput])
     
@@ -70,12 +71,13 @@ export const TranslationElement = () => {
                     translate(translatorState[ translatorState.current ],
                         translatorState.from,
                         translatorState.to,
-                        updateTextInput,
+                        updateTextInputFromApi,
                         translatorState.current
                     )
                 }}>
                     <span>Translate</span>
-                    <i className="bi bi-arrow-left-right suggestions-icon"></i>
+                    {translatorState.isLoading? <Spinner /> : <i className="bi bi-arrow-left-right suggestions-icon"></i>}
+                    
                 </Button>
             </SuggestionBox>
             <Phrases className="phrases">

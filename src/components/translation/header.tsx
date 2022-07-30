@@ -4,7 +4,6 @@ import { TranslatorContext } from "../../context";
 import { inputPosition, languagePosition } from "../../context/translatorContext";
 
 const Container = styled.div`
-   
             background: ${ (props) => props.theme.colors.colorWhite };
             width: 100%;
             display: flex;
@@ -41,8 +40,8 @@ const Container = styled.div`
                             display: flex;
                             justify-content: center;
                             &:hover {
-                                color: ${ (props) =>
-        props.theme.colors.colorTextDark2 };
+                                color: ${ (props) => props.theme.colors.colorPrimary };
+                                background: ${ (props) => props.theme.colors.colorPrimaryLight };
                             }
                         }
                     }
@@ -69,7 +68,7 @@ const Header = ({ position, languagePosition }: IProps) => {
     return (
         <Container className="main">
             <span className="main-selected">
-            <i className="bi bi-translate nav-icon__logo"></i>
+                <i className="bi bi-translate nav-icon__logo"></i>
             </span>
             <ul className="main-languageList">
                 {options[ position ].map(option => (
@@ -77,7 +76,11 @@ const Header = ({ position, languagePosition }: IProps) => {
                         key={option}
                         className="main-languageList__item"
                         onClick={() => { updateLanguage(option) }}>
-                        <a className={selectedLanguage === option ? "active" : ''} href="/#">{option}</a>
+                        <a className={selectedLanguage === option || option === "English" ?
+                            "active" : ''}
+                            href="/#">
+                            {option}
+                        </a>
                     </li>
                 ))
                 }

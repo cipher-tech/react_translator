@@ -4,6 +4,7 @@ interface IActionType {
     UPDATE_TEXT_FROM_API: string;
     UPDATE_LANGUAGE: string;
     CLEAR_TEXT: string;
+    TOGGLE_LOADING: string;
 }
 export type Language = "English" | "German" | "Russian" | "French" | string;
 export type languagePosition = "languageRight" | "languageLeft"
@@ -16,6 +17,7 @@ type options = {
     selectedLanguage: Language;
     from: Language;
     to: Language;
+    isLoading: boolean;
 };
 interface IState {
     translatorState: options
@@ -40,7 +42,8 @@ interface IContextValues {
     updateTextInput: UpdateInputType,
     updateTextInputFromApi: UpdateInputType,
     updateLanguage: (value: Language) => void,
-    clearInputs: () => void
+    clearInputs: () => void,
+    toggleLoading: () => void
 }
 
 const initialState: IContextValues = {
@@ -50,19 +53,22 @@ const initialState: IContextValues = {
         current: "leftInput",
         selectedLanguage: "German",
         from: "english",
-        to: "German"
+        to: "German",
+        isLoading: false
     },
     updateTextInput: () => { },
     updateTextInputFromApi: () => { },
     updateLanguage: () => { },
     clearInputs: () => { },
+    toggleLoading: () => { },
 };
 
 export const actions: IActionType = {
     UPDATE_TEXT: "UPDATE_TEXT",
     UPDATE_TEXT_FROM_API: "UPDATE_TEXT_FROM_API",
     UPDATE_LANGUAGE: "REMOVE_TODO_ITEM",
-    CLEAR_TEXT: "CLEAR_TEXT"
+    CLEAR_TEXT: "CLEAR_TEXT",
+    TOGGLE_LOADING: "TOGGLE_LOADING"
 };
 
 //Reducer to Handle Actions
@@ -94,7 +100,8 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                     [ payload.textInputPosition ]: payload.value,
                     current,
                     from,
-                    to
+                    to,
+                    isLoading: true
                 }
             }
 
@@ -108,6 +115,8 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                 translatorState: {
                     ...state.translatorState,
                     [ payload.textInputPosition === 'leftInput'? 'rightInput' : 'leftInput' ]: payload.value,
+                    isLoading: false
+
                 }
             }
 
@@ -131,6 +140,15 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                     ...state.translatorState,
                     rightInput: '',
                     leftInput: '',
+                }
+            };
+            
+        case actions.TOGGLE_LOADING:
+            return {
+                ...state,
+                translatorState: {
+                    ...state.translatorState,
+                    isLoading: !state.translatorState.isLoading
                 }
             };
         default:
@@ -157,6 +175,9 @@ export const TranslatorProvider = ({ children }: IProps) => {
         },
         clearInputs: () => {
             dispatch({ type: actions.CLEAR_TEXT });
+        },
+        toggleLoading: () => {
+            dispatch({ type: actions.TOGGLE_LOADING });
         }
     };
 

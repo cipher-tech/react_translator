@@ -1,5 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
+import ReactTooltip from 'react-tooltip'
 import { TranslatorContext } from "../../context";
 import { inputPosition, languagePosition } from "../../context/translatorContext";
 import Header from "./header";
@@ -43,6 +44,11 @@ const Container = styled.div`
                 display: flex;
                 span {
                     padding: 1rem;
+                    border-radius: 50%;
+                    transition: all 0.3s linear;
+                    :hover {
+                        background: ${ (props) => props.theme.colors.colorPrimaryLight };
+                    }
                 }
             }
         }
@@ -54,8 +60,18 @@ type IProps = {
     languagePosition: languagePosition
 }
 export const TranslatorBox = ({ position, languagePosition }: IProps) => {
+    // const [speechToTest, setSpeechToTest] = useState({isActive: false, content:''})
     const { translatorState, updateTextInput, clearInputs } = useContext(TranslatorContext)
+
+    let textContent = translatorState[ position ];
     const isLeftInput = position === 'leftInput';
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if(textContent.length === 200){
+            return
+        }
+        updateTextInput(position, e.target.value) 
+    }
     return (
         <Container className="translatorBox">
             <Header position={position} languagePosition={languagePosition} />
@@ -65,10 +81,11 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
                         className="translatorBox-input__area--input"
                         name="input"
                         id="1"
-                        value={translatorState[ position ] || ''}
-                        onChange={(e) => { updateTextInput(position, e.target.value) }}
+                        value={textContent || ''}
+                        onChange={(e) => {handleChange(e)}}
                         cols={50}
                         rows={10}
+                        placeholder="Enter text here"
                     >
                         Enter text
                     </textarea>
@@ -84,15 +101,25 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
                 <div className="translatorBox-input__footer">
                     <div className="translatorBox-input__footer--speech">
                         <span className="translatorBox-input__footer--speech--toText">
-                            <i className="bi bi-mic-fill"></i>
+                            {isLeftInput ?
+                                <i className="bi bi-clipboard" data-tip={`Copy to clipboard`}></i>
+                                :
+                                <i className="bi bi-mic-fill" data-tip={`Translate by voice`}></i>
+                            }
                         </span>
                         <span className="translatorBox-input__footer--speech--toVoice">
-                            <i className="bi bi-volume-up-fill"></i>
+                            {isLeftInput ?
+                                <i className="bi bi-star" data-tip={`Save Translation`}></i>
+                                :
+                                <i className="bi bi-volume-up-fill" data-tip={`Listen`}></i>
+                            }
+                            
                         </span>
                     </div>
-                    <span>45/200</span>
+                    <span>{textContent.length}/200</span>
                 </div>
             </div>
+            <ReactTooltip delayHide={300} />
         </Container>
     );
 };

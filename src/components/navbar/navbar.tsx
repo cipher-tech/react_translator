@@ -10,6 +10,8 @@ const Nav = styled.nav`
     justify-content: space-between;
     align-content: center;
     align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    background-color: rgba(255,255,255,1);
     a {
         cursor: pointer;
     }
@@ -39,7 +41,7 @@ export const NavBar = () => {
             <div className="nav-icon">
                 <i className="bi bi-translate nav-icon__logo"></i>
                 <a className="nav-icon__text" href="/">
-                    ciTrans App
+                    MetaTranslate App
                 </a>
             </div>
             <p className="nav-greeting">
