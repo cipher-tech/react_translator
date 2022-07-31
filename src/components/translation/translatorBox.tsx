@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import REACT, { useEffect, useContext, useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from 'react-tooltip'
 import { TranslatorContext } from "../../context";
 import { inputPosition, languagePosition } from "../../context/translatorContext";
 import Header from "./header";
+import useSpeechToText from "../../hooks/useSpeechToText";
 
 const Container = styled.div`
     width: 100%;
@@ -60,17 +61,28 @@ type IProps = {
     languagePosition: languagePosition
 }
 export const TranslatorBox = ({ position, languagePosition }: IProps) => {
-    // const [speechToTest, setSpeechToTest] = useState({isActive: false, content:''})
+    const [ activateSpeech, setActivateSpeech ] = useState(false)
+    const [ transcript ] = useSpeechToText(activateSpeech);
+
     const { translatorState, updateTextInput, clearInputs } = useContext(TranslatorContext)
 
     let textContent = translatorState[ position ];
     const isLeftInput = position === 'leftInput';
 
+    useEffect(() => {
+        updateTextInput('rightInput', transcript);
+        setActivateSpeech(false)
+    }, [transcript])
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        if(textContent.length === 200){
+        if (textContent.length === 200) {
             return
         }
-        updateTextInput(position, e.target.value) 
+        updateTextInput(position, e.target.value)
+    }
+
+    const handleSpeechToText = (e: REACT.MouseEvent<HTMLElement, MouseEvent>) => {
+        setActivateSpeech(!activateSpeech);
     }
     return (
         <Container className="translatorBox">
@@ -82,7 +94,7 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
                         name="input"
                         id="1"
                         value={textContent || ''}
-                        onChange={(e) => {handleChange(e)}}
+                        onChange={(e) => { handleChange(e) }}
                         cols={50}
                         rows={10}
                         placeholder="Enter text here"
@@ -104,7 +116,7 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
                             {isLeftInput ?
                                 <i className="bi bi-clipboard" data-tip={`Copy to clipboard`}></i>
                                 :
-                                <i className="bi bi-mic-fill" data-tip={`Translate by voice`}></i>
+                                <i className="bi bi-mic-fill" data-tip={`Translate by voice`} onClick={(e) => handleSpeechToText(e)}></i>
                             }
                         </span>
                         <span className="translatorBox-input__footer--speech--toVoice">
@@ -113,7 +125,7 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
                                 :
                                 <i className="bi bi-volume-up-fill" data-tip={`Listen`}></i>
                             }
-                            
+
                         </span>
                     </div>
                     <span>{textContent.length}/200</span>

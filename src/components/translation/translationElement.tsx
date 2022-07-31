@@ -6,6 +6,7 @@ import { useContext, useEffect } from "react";
 import { TranslatorContext } from "../../context";
 import useDebounce from "../../hooks/useDebounce";
 import { Spinner } from "../spinner/spinner";
+// import useSpeechToText from "../../hooks/useSpeechToText";
 const Container = styled.div`
     border-radius: .78rem;
     overflow: hidden;
@@ -54,7 +55,6 @@ export const TranslationElement = () => {
     const { translatorState, updateTextInputFromApi, updateTextInput} = useContext(TranslatorContext)
     const { leftInput, rightInput } = translatorState
     useDebounce([ leftInput, rightInput ])
-
     const phrases = [
         'Hello there!',
         'Good morning',
@@ -96,7 +96,7 @@ export const TranslationElement = () => {
                 <ul className="phrases-list">
                     {
                         phrases.map(phrase => (
-                            <li className="phrases-list__item"
+                            <li key={phrase} className="phrases-list__item"
                                 onClick={ (e) =>{handlePhraseChange(phrase)}}
                             >
                                 <Button rounded>{phrase}</Button>
