@@ -1,12 +1,13 @@
+import { useContext } from "react";
 import styled from "styled-components";
 import translate from "../../api";
 import { Button } from "../button/button";
 import { TranslatorBox } from "./translatorBox";
-import { useContext, useEffect } from "react";
 import { TranslatorContext } from "../../context";
 import useDebounce from "../../hooks/useDebounce";
 import { Spinner } from "../spinner/spinner";
-// import useSpeechToText from "../../hooks/useSpeechToText";
+import { UseShortcut } from "../../hooks/useShortcut";
+
 const Container = styled.div`
     border-radius: .78rem;
     overflow: hidden;
@@ -52,20 +53,50 @@ const Phrases = styled.div`
 `;
 
 export const TranslationElement = () => {
-    const { translatorState, updateTextInputFromApi, updateTextInput} = useContext(TranslatorContext)
+    const { translatorState, updateTextInputFromApi, updateTextInput, updateLanguage } = useContext(TranslatorContext)
     const { leftInput, rightInput } = translatorState
+    
+    // called the hook to handle debouncing of api calls and passed both inputs
     useDebounce([ leftInput, rightInput ])
+
+    const shortCut: string[] = []
+
+    // mapped expected shortcut keys to language
+    const keyCombinations: any = {
+        "Shift+g": "German",
+        "Shift+r": "Russian",
+        "Shift+f": "French"
+    }
+
+    // checked if key combination is the right one and update the language
+    const onKeyPress = (event: KeyboardEvent) => {
+        if (shortCut.length < 2) {
+            shortCut.push(event.key)
+        }
+        if (shortCut.length === 2) {
+            let shortCutCombination = shortCut.join('+')
+            updateLanguage(keyCombinations[ shortCutCombination ])
+            shortCut.length = 0
+        }
+        console.log(`key pressed: ${ event.key }`);
+    };
+
+    // Called the hook to handle shortcut entry and specified the expected keys
+    UseShortcut([ 'Shift', 'g', 'r', 'f' ], onKeyPress);
+
+    // update the right input if a phrase is selected which will trigger a translation event
+    const handlePhraseChange = (phrase: string) => {
+        if (phrase === translatorState[ translatorState.current ]) return
+        updateTextInput('rightInput', phrase);
+    }
+
+    // specified available quick phrases
     const phrases = [
         'Hello there!',
         'Good morning',
         'Goodbye',
         'How are you?',
     ]
-
-    const handlePhraseChange = (phrase: string) => {
-        if(phrase === translatorState[ translatorState.current ]) return
-        updateTextInput('rightInput', phrase); 
-    }
     return (
         <>
             <Container className="translationElement">
@@ -86,7 +117,7 @@ export const TranslationElement = () => {
                         translatorState.current
                     )
                 }}>
-                    <span>Translate</span>
+                    <span role="button">Translate</span>
                     {translatorState.isLoading ? <Spinner /> : <i className="bi bi-arrow-left-right suggestions-icon"></i>}
 
                 </Button>
@@ -97,7 +128,7 @@ export const TranslationElement = () => {
                     {
                         phrases.map(phrase => (
                             <li key={phrase} className="phrases-list__item"
-                                onClick={ (e) =>{handlePhraseChange(phrase)}}
+                                onClick={(e) => { handlePhraseChange(phrase) }}
                             >
                                 <Button rounded>{phrase}</Button>
                             </li>

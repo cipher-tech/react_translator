@@ -1,27 +1,19 @@
 import { useState, useEffect } from "react";
 
-interface IWindow extends Window {
-    webkitSpeechRecognition: any;
-}
-interface IWindow2 extends Window {
-    webkitSpeechGrammarList: any;
+class NewWindow{
+    stop(){}
+    start(){}
+    onresult(){}
 }
 
 const useSpeechToText = (activate: boolean) => {
-    let webkitSpeechR: IWindow = (window as any)[ "webkitSpeechRecognition" ]
-    let webkitSpeechRecList: IWindow2 = (window as any)[ "webkitSpeechGrammarList" ]
-
-    let colors = [ 'aqua', 'azure', 'beige', 'bisque', 'black', 'blue', 'brown', 'chocolate', 'coral' ];
-    let grammar = '#JSGF V1.0; grammar colors; public <colors> = ' + colors.join(' | ') + ' ;'
-
-    var SpeechRecognition: any = webkitSpeechR
-    let recognition = new SpeechRecognition()
-
-    var SpeechGrammarList: any = webkitSpeechRecList
-    let speechRecognitionList = new SpeechGrammarList()
-    speechRecognitionList.addFromString(grammar, 1);
-
-    recognition.grammars = speechRecognitionList;
+    
+    let webkitSpeechR = (window as any)[ "webkitSpeechRecognition" ] as any
+    
+    if (typeof webkitSpeechR == "undefined") {
+        webkitSpeechR = NewWindow;
+      }
+    let recognition = new webkitSpeechR()
 
     const [ speechTranscript, setSpeechTranscript ] = useState('');
     const [ speechConfidence, setSpeechConfidence ] = useState('');

@@ -33,6 +33,9 @@ const Container = styled.div`
                 border: none;
                 flex: 1;
                 background: none;
+                :focus{
+                    outline: none;
+                }
             }
         }
         &__footer {
@@ -72,8 +75,7 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
     useEffect(() => {
         updateTextInput('rightInput', transcript);
         setActivateSpeech(false)
-    }, [transcript])
-
+    }, [transcript]) 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (textContent.length === 200) {
             return
