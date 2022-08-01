@@ -1,3 +1,4 @@
+import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -51,5 +52,6 @@ export const Instructions = () => {
                 - Press SHIFT and F to select French <br />
             </p>
         </div>
+        <ReactTooltip delayHide={300} />
     </Container>;
 };

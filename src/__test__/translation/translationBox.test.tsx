@@ -27,9 +27,9 @@ describe('TranslationBox', () => {
         </div>
       </>
     }
-   render(<TranslatorContext.Provider value={value}>
+   render(<TranslatorProvider>
       <TestComponent />
-    </TranslatorContext.Provider>);
+    </TranslatorProvider>);
 
     const element = screen.getByTestId('textInput')
     expect(element).toBeInTheDocument();

@@ -12,33 +12,33 @@ const Container = styled.div`
 `;
 
 function App() {
-    const [ isLoading, setIsLoading ] = useState(true)
+  const [ isLoading, setIsLoading ] = useState(true)
 
-    useEffect(() => {
-        setIsLoading(!isLoading);
-    }, [])
+  useEffect(() => {
+    setIsLoading(!isLoading);
+  }, [])
 
-    return (
-        <>
-            {
-                isLoading ?
-                    <Spinner />
-                    :
-                    <TranslatorProvider>
-                        <Container style={{ display: "flex" }}>
-                            <ThemeProvider theme={theme}>
-                                <>
-                                    <GlobalStyle />
-                                    <NavBar />
-                                    <Instructions />
-                                    <TranslationElement />
-                                </>
-                            </ThemeProvider>
-                        </Container>
-                    </TranslatorProvider>
-            }
-        </>
-    );
+  return (
+    <>
+      {
+        isLoading ?
+          <Spinner />
+          :
+          <TranslatorProvider>
+            <Container style={{ display: "flex" }}>
+              <ThemeProvider theme={theme}>
+                <>
+                  <GlobalStyle />
+                  <NavBar />
+                  <Instructions />
+                  <TranslationElement />
+                </>
+              </ThemeProvider>
+            </Container>
+          </TranslatorProvider>
+      }
+    </>
+  );
 }
 
 export default App;
