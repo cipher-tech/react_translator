@@ -61,6 +61,7 @@ type IProps = {
 }
 const Header = ({ position, languagePosition }: IProps) => {
     const { translatorState: { selectedLanguage }, updateLanguage } = useContext(TranslatorContext)
+    // map language options
     const options = {
         rightInput: [ 'English' ],
         leftInput: [ 'German', 'Russian', 'French' ],

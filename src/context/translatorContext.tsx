@@ -1,4 +1,6 @@
 import React from "react";
+
+// define interface for our action types
 interface IActionType {
     UPDATE_TEXT: string;
     UPDATE_TEXT_FROM_API: string;
@@ -6,10 +8,17 @@ interface IActionType {
     CLEAR_TEXT: string;
     TOGGLE_LOADING: string;
 }
+
+// define our language types
 export type Language = "English" | "German" | "Russian" | "French" | string;
-export type languagePosition = "languageRight" | "languageLeft"
+
+// define our language position type; used to specify the language source
+export type languagePosition = "languageRight" | "languageLeft";
+
+// define our input position type; used to specify our input source
 export type inputPosition = "rightInput" | "leftInput"
 
+// define interface for our state
 type options = {
     rightInput: string;
     leftInput: string;
@@ -19,14 +28,18 @@ type options = {
     to: Language;
     isLoading: boolean;
 };
+
+// define interface to separate our state from action creators
 interface IState {
     translatorState: options
 }
 
+// define our context provider props
 type IProps = {
     children: JSX.Element;
 };
 
+// define interface for our dispatched actions
 interface IAction {
     type: string;
     payload?: {
@@ -36,7 +49,10 @@ interface IAction {
     };
 }
 
+// define type for UpdateInputType action creator
 export type UpdateInputType = (textInputPosition: inputPosition, value: string) => void
+
+// define type for our context values
 interface IContextValues {
     translatorState: options,
     updateTextInput: UpdateInputType,
@@ -46,23 +62,25 @@ interface IContextValues {
     toggleLoading: () => void
 }
 
+// defining our initialState
 const initialState: IContextValues = {
     translatorState: {
-        rightInput: "",
-        leftInput: "",
-        current: "leftInput",
-        selectedLanguage: "German",
-        from: "english",
-        to: "German",
-        isLoading: false
+        rightInput: "",  // the right input box
+        leftInput: "", // the left input box
+        current: "leftInput", // were the user is currently typing on
+        selectedLanguage: "German", // the language selected by the user
+        from: "english", // language to translate from 
+        to: "German", // language to trans to
+        isLoading: false // is our app currently performing any action?
     },
-    updateTextInput: () => { },
-    updateTextInputFromApi: () => { },
-    updateLanguage: () => { },
-    clearInputs: () => { },
-    toggleLoading: () => { },
+    updateTextInput: () => { }, // action creator to update left or right input
+    updateTextInputFromApi: () => { },  // action creator to update left or right input when a request is made
+    updateLanguage: () => { }, // action creator to update language
+    clearInputs: () => { },  // action creator to clear all inputs
+    toggleLoading: () => { }, //  action creator to toggle loading state
 };
 
+// defining our actions
 export const actions: IActionType = {
     UPDATE_TEXT: "UPDATE_TEXT",
     UPDATE_TEXT_FROM_API: "UPDATE_TEXT_FROM_API",
@@ -80,11 +98,13 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
         payload = { textInputPosition: '', value: '' }
     } = action;
 
+    // selecting the right reducer to handle our action
     switch (type) {
         case actions.UPDATE_TEXT:
             if (!payload.textInputPosition) {
                 return state
             }
+            //set current, to, from and text input from the user input
             let current = payload.textInputPosition;
             let from = "English"
             let to = state.translatorState.selectedLanguage;
@@ -110,6 +130,8 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                 return state
             }
 
+            //set text input from the api request
+
             return {
                 ...state,
                 translatorState: {
@@ -124,6 +146,8 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
             if (payload.value == null) {
                 return state
             }
+            //set to, from and language from the user input
+
             return {
                 ...state,
                 translatorState: {
@@ -134,6 +158,7 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                 }
             }
         case actions.CLEAR_TEXT:
+            //clear all texts
             return {
                 ...state,
                 translatorState: {
@@ -144,6 +169,7 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
             };
             
         case actions.TOGGLE_LOADING:
+            //toggle loading state
             return {
                 ...state,
                 translatorState: {
@@ -163,23 +189,34 @@ export const TranslatorProvider = ({ children }: IProps) => {
     const [ state, dispatch ] = React.useReducer(reducer, initialState);
 
     const value: IContextValues = {
-        translatorState: state.translatorState,
+        translatorState: state.translatorState, // our state object
+
+        // action to update text
         updateTextInput: (textInputPosition: inputPosition, value: string) => {
             dispatch({ type: actions.UPDATE_TEXT, payload: { textInputPosition, value } });
         },
+
+        // action to update text from APi
         updateTextInputFromApi: (textInputPosition: inputPosition, value: string) => {
             dispatch({ type: actions.UPDATE_TEXT_FROM_API, payload: { textInputPosition, value } });
         },
+
+        // action to update language
         updateLanguage: (value: Language) => {
             dispatch({ type: actions.UPDATE_LANGUAGE, payload: { value } });
         },
+
+        // action to clear input
         clearInputs: () => {
             dispatch({ type: actions.CLEAR_TEXT });
         },
+
+        // action to toggle loading state
         toggleLoading: () => {
             dispatch({ type: actions.TOGGLE_LOADING });
         }
     };
 
+    // return our context provider
     return <TranslatorContext.Provider value={value}>{children}</TranslatorContext.Provider>;
 };

@@ -5,6 +5,7 @@ import { TranslatorContext } from "../../context";
 import { inputPosition, languagePosition } from "../../context/translatorContext";
 import Header from "./header";
 import useSpeechToText from "../../hooks/useSpeechToText";
+import useTextToSpeech from "../../hooks/useTextToSpeech";
 
 const Container = styled.div`
     width: 100%;
@@ -46,10 +47,14 @@ const Container = styled.div`
             align-items: center;
             &--speech {
                 display: flex;
+                .active {
+                    background: ${ (props) => props.theme.colors.colorPrimaryLight };
+                }
                 span {
                     padding: 1rem;
                     border-radius: 50%;
                     transition: all 0.3s linear;
+                   
                     :hover {
                         background: ${ (props) => props.theme.colors.colorPrimaryLight };
                     }
@@ -65,6 +70,7 @@ type IProps = {
 }
 export const TranslatorBox = ({ position, languagePosition }: IProps) => {
     const [ activateSpeech, setActivateSpeech ] = useState(false)
+    const [ activateTextToSpeech, setActivateTextToSpeech ] = useState(false)
     const [ transcript ] = useSpeechToText(activateSpeech);
 
     const { translatorState, updateTextInput, clearInputs } = useContext(TranslatorContext)
@@ -72,11 +78,15 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
     let textContent = translatorState[ position ];
     const isLeftInput = position === 'leftInput';
 
+    useTextToSpeech(activateTextToSpeech, translatorState[ 'rightInput' ])
     useEffect(() => {
+        // update textbox when speech to text is activated
         updateTextInput('rightInput', transcript);
         setActivateSpeech(false)
-    }, [transcript]) 
+    }, [ transcript ])
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        // handle input change
         if (textContent.length === 200) {
             return
         }
@@ -85,6 +95,9 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
 
     const handleSpeechToText = (e: REACT.MouseEvent<HTMLElement, MouseEvent>) => {
         setActivateSpeech(!activateSpeech);
+    }
+    const handleTextToSpeech = (e: REACT.MouseEvent<HTMLElement, MouseEvent>) => {
+        setActivateTextToSpeech(!activateTextToSpeech);
     }
     return (
         <Container className="translatorBox">
@@ -114,21 +127,31 @@ export const TranslatorBox = ({ position, languagePosition }: IProps) => {
                 </div>
                 <div className="translatorBox-input__footer">
                     <div className="translatorBox-input__footer--speech">
-                        <span className="translatorBox-input__footer--speech--toText">
-                            {isLeftInput ?
+                        {isLeftInput ?
+                            <span className="translatorBox-input__footer--speech--toText">
                                 <i className="bi bi-clipboard" data-tip={`Copy to clipboard`}></i>
-                                :
-                                <i className="bi bi-mic-fill" data-tip={`Translate by voice`} onClick={(e) => handleSpeechToText(e)}></i>
-                            }
-                        </span>
-                        <span className="translatorBox-input__footer--speech--toVoice">
-                            {isLeftInput ?
-                                <i className="bi bi-star" data-tip={`Save Translation`}></i>
-                                :
-                                <i className="bi bi-volume-up-fill" data-tip={`Listen`}></i>
-                            }
+                            </span>
+                            :
+                            <span className={`translatorBox-input__footer--speech--toText ${ activateSpeech ? 'active' : "" }`}>
+                                <i className={`bi bi-mic-fill `}
+                                    data-tip={`Translate by voice`}
+                                    onClick={(e) => handleSpeechToText(e)}></i>
+                            </span>
 
-                        </span>
+                        }
+                        {isLeftInput ?
+                            <span className="translatorBox-input__footer--speech--toText">
+                                <i className="bi bi-star" data-tip={`Save Translation`}></i>
+                            </span>
+                            :
+                            <span className={`translatorBox-input__footer--speech--toText ${ activateTextToSpeech ? 'active' : "" }`}>
+                                <i className={`bi bi-volume-up-fill`}
+                                    data-tip={`Listen`}
+                                    onClick={(e) => handleTextToSpeech(e)}></i>
+                            </span>
+
+                        }
+
                     </div>
                     <span>{textContent.length}/200</span>
                 </div>

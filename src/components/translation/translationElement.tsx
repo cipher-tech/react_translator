@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import translate from "../../api";
 import { Button } from "../button/button";
@@ -54,8 +54,7 @@ const Phrases = styled.div`
 
 export const TranslationElement = () => {
     const { translatorState, updateTextInputFromApi, updateTextInput, updateLanguage } = useContext(TranslatorContext)
-    const { leftInput, rightInput } = translatorState
-    
+    const { leftInput, rightInput } = translatorState;
     // called the hook to handle debouncing of api calls and passed both inputs
     useDebounce([ leftInput, rightInput ])
 

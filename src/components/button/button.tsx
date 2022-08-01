@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+// define reusable button component
 type IProps = {
     rounded?: boolean
     disabled?: boolean
