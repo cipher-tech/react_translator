@@ -24,7 +24,7 @@ const translate = async (text: string, from: Language, to: Language, dispatch?: 
         const URL = `http://localhost:4000/api/v1`;
 
         //  send request and set headers
-        const response = await Axios.post(URL, {
+        const response = await Axios.post(URL1, {
                 TextToTranslate: text
         },{
             headers: {
@@ -34,7 +34,7 @@ const translate = async (text: string, from: Language, to: Language, dispatch?: 
 
         // update appropriate text input
         if(dispatch && position){
-            dispatch(position, response.data.data.TranslatedTextResult )
+            dispatch(position, response.data.TranslatedTextResult )
         }
         return response.data
     } catch (error) {
