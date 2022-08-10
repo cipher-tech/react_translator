@@ -36,9 +36,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - PWA support
 - Speech-to-text support
 - text-to-speech support
-- shortcut keys,
-- quick phrases,
-- word limit,
+- shortcut keys
+- quick phrases
+- word limit
+- debounced API calls
 - Instructions and more.
 
 ## Tech Stack
