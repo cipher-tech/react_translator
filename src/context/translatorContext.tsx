@@ -121,7 +121,7 @@ const reducer: (translatorState: IState, action: IAction) => IState = (
                     current,
                     from,
                     to,
-                    isLoading: true
+                    isLoading: payload.value? true : false
                 }
             }
 
